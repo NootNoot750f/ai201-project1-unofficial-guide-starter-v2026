@@ -22,14 +22,10 @@ python-dotenv>=1.0,<1.2
 # Unit 2's "try a second embedding model" option is the one thing that does
 # need the heavier route. It is an optional install, not a requirement:
 #     pip install 'sentence-transformers>=3.4,<3.5'
-chromadb>=0.6,<0.7
 
-# Not used directly. This is chromadb's telemetry dependency, and chromadb
 # declares it as `posthog>=2.4.0` with NO upper bound. posthog 7.x changed a
-# function signature that chromadb still calls the old way, so with a current
 # posthog every Chroma call prints "Failed to send telemetry event ...".
 # It looks exactly like a real error and isn't one. Pinned here because
-# chromadb didn't pin it — this is the same class of bug as the unpinned
 # Gradio that crashed a live class last year.
 posthog>=3.0,<4.0
 
