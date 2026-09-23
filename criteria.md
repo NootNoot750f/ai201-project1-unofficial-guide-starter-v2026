@@ -27,6 +27,8 @@ contains the answer.
 <!-- e.g. "One of my questions is about a topic only two documents mention, so
      I expect that one to be hard." -->
 
+Four of my questions ask about course workload. Topics covered well with multiple documents. My fifth question asks "Why do people in China speak Chinese?" which is completely outside the corpus. I expect that one to fail retrieval because it has no connection to the documents at all.
+
 ---
 
 ## 2. Every answer names a source
@@ -38,8 +40,7 @@ Every answer the system produces names at least one source document.
 <!-- Why all five and not four? What about your setup makes that achievable —
      or what would have to go wrong for it not to be? -->
 
-This is a good target because it is quantitative, the criterion is something that can be measured against to see if the goal was met.
-
+All five answers will name a source because sourcing is built into the pipeline, not requested of the model. Every retrieved chunk is labeled "[from filename]" in the prompt, and the system instruction requires the naming the document. The model would have to explicitly refuse or fail entirely to not name a source. 
 ---
 
 ## 3. The relevance gate stops out-of-corpus questions
@@ -57,7 +58,7 @@ in at least 4 of 5 tries.
 
 <!-- What did your distances look like when you set the cutoff in Milestone 4?
      Was there a clean gap, or did the two groups overlap? -->
-
+In-scope questions ranged from 0.342 to 0.480, while the out-of-corpus question scored 0.921. There was a clean gap between the two groups, so a cutoff at 0.6 refuses everything unrelated without blocking legitimate questions.
 ---
 
 ## 4. Something about your chunks
@@ -74,7 +75,11 @@ in at least 4 of 5 tries.
        - "No chunk is shorter than 200 characters, since anything below that
           in my corpus turned out to be a heading with no content under it." -->
 
+All 5 of my sampled chunks are self contained posts with no sentence cut in half at either end. 
+
+
 **Why this target:**
+Posts in campus_life are atomic units. If chunk splitting a sentence across chunks, the answer could fall between them. Keeping each chunk as a whole post ensures every chunk is readable and complete on its own. 
 
 ---
 
@@ -88,8 +93,11 @@ in at least 4 of 5 tries.
      present — anything, as long as it names a number or an observable
      outcome. -->
 
-**Why this target:**
+     Every answer names a source that actually appears in the retrieved chunks for that question (5/5)
 
+
+**Why this target:**
+Criterion 2 checks that the sources are named. This checks that theyre "right", that the model isnt just making up a document name. The retrieved chunks include the filename, so the model ahs the real names available. 
 ---
 
 <!-- ─────────────────────────────────────────────────────────────────────────
