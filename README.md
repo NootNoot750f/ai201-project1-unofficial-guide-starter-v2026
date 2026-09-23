@@ -27,10 +27,12 @@
 
      Milestone 5. -->
 
+This system searches a corpus of campus life documents, student reviews of dining halls, courses, housing, and administrative procedures, and answers questions about student experiences at the college. It retrieves relevant chunks from the corpus and grounds answers in those chunks, naming the document each answer came from.
+
 ## Chunking Strategy
 
-**Chunk size:**
-**Overlap:**
+**Chunk size:** whole post (50-800 characters)
+**Overlap:** 0
 
 <!-- What about YOUR documents made you pick these numbers? Short posts and
      long sectioned guides don't want the same chunking, and "800 seemed
@@ -127,14 +129,18 @@ without reading what came before or after?
      visible. Milestone 4. -->
 
 **Question:**
+python app.py ask "What is the course load from Data Structures?"
 
 **Answer:**
+(best distance 0.453, cutoff 0.6)
+
+For CS 210 Data Structures, you should expect 8 to 10 hours of work a week outside of class, and the workload is front-loaded with the first month being heavier than the rest.
 
 ```
 
 ```
 
-**My relevance cutoff:**
+**My relevance cutoff:** 0.6
 
 <!-- The number you set in config.py, and how you got there.
 
@@ -145,9 +151,15 @@ without reading what came before or after?
 
      Milestone 4. -->
 
-| Question | In corpus? | Best distance |
-| -------- | ---------- | ------------- |
-|          |            |               |
+In-scope questions (about course workload, dining, housing) ranged from 0.342 to 0.480. The out-of-corpus question (China/Chinese) scored 0.921. The gap at 0.6 cleanly separates them, so the gate refuses everything unrelated without blocking legitimate questions.
+
+| Question                                                          | In corpus? | Best distance |
+| ----------------------------------------------------------------- | ---------- | ------------- |
+| What is the course load from Data Structures?                     | Yes        | 0.453         |
+| What is the course load from Databases?                           | Yes        | 0.480         |
+| What is the course load from Cell Biology?                        | Yes        | 0.342         |
+| What is the amount of time I need to work on Cell Biology a week? | Yes        | 0.348         |
+| Why do people in China speak Chinese?                             | No         | 0.921         |
 
 ## How I Used AI
 
@@ -161,8 +173,9 @@ without reading what came before or after?
      Milestone 5. -->
 
 **1.**
-
+I asked Claude to explain the difference between chunking strategies and what to look for in sample chunks. It helped me understand why one-sentence chunks are too small but full posts might work. I then implemented the strategy in my chunker.
 **2.**
+I asked Claude to write the acceptance criteria. It wrote generic text, so I rewrote criteria 2 and 5 to be specific to my system, one about sourcing being deterministic in my pipeline, the other about source correctness.
 
 <!-- ── Stretch features ─────────────────────────────────────────────────────
      Doing one? Say so here BEFORE you start. A feature this README never
